@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY MEDS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mymed.css">
+    <link rel="stylesheet" href="animation.css">
+    <link href="locatorplus.css" rel="stylesheet">
+    <script>
+        const CONFIGURATION = {
+            "locations": [
+                {"title":"Escondido Grill","address1":"601 Geary St","address2":"San Francisco, CA 94102, USA","coords":{"lat":37.7866,"lng":-122.4133},"placeId":"ChIJ5Sz52pGAhYAR1raOybzuDp8","actions":[{"label":"Reserve a table","defaultUrl":"https://www.gstatic.com/pantheon/images/maps/reserve_with_google_preview_v1.png"}]},
+                // ... other locations ...
+            ],
+            "mapOptions": {"center":{"lat":38.0,"lng":-100.0},"fullscreenControl":true,"mapTypeControl":false,"streetViewControl":false,"zoom":4,"zoomControl":true,"maxZoom":17,"mapId":""},
+            "mapsApiKey": "YOUR_ACTUAL_API_KEY_HERE",
+            "capabilities": {"input":true,"autocomplete":true,"directions":false,"distanceMatrix":true,"details":false,"actions":true}
+        };
+        
+        // Add your chatbot API key here
+        const CHATBOT_API_KEY = AIzaSyDxQSIR3uXc46uD-ElB7kVEIhYajRbsPuM;
+    </script>
+    <script src="locatorplus.js" type="module"></script>
+</head>
+<body>
+    <header>
+        <h1>MY MEDS</h1>
+    </header>
+    
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Medicines</a>
+        <a href="#">Looking for more</a>
+    </nav>
+    
+    <div class="content">
+        <div class="left-half">
+            <h2>Map</h2>
+            <div id="map">
+                <gmpx-store-locator map-id="DEMO_MAP_ID"></gmpx-store-locator>
+            </div>
+        </div>
+        <div class="right-half">
+            <h2>What are you looking for?</h2>
+            <input type="text" id="search" placeholder="Search for medicines...">
+            <button onclick="search()">Search</button>
+            <div id="search-results"></div>
+        </div>
+    </div>
+    
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <h3>Chatbot</h3>
+            <button id="chatbot-toggle">-</button>
+        </div>
+        <div id="chatbot-body">
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input">
+                <input type="text" id="chatbot-text" placeholder="Ask a question...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function search() {
+            var query = document.getElementById('search').value;
+            document.getElementById('search-results').innerHTML = "Searching for: " + query;
+        }
+
+        function sendChatbotMessage() {
+            var message = document.getElementById('chatbot-text').value;
+            // You can now use CHATBOT_API_KEY in your chatbot logic
+            // For example:
+            // sendToChatbotAPI(message, CHATBOT_API_KEY);
+            document.getElementById('chatbot-messages').innerHTML += "<p>User: " + message + "</p>";
+            document.getElementById('chatbot-text').value = "";
+        }
+
+        function toggleChatbot() {
+            var chatbotBody = document.getElementById('chatbot-body');
+            var chatbotToggle = document.getElementById('chatbot-toggle');
+            if (chatbotBody.style.display === 'none') {
+                chatbotBody.style.display = 'block';
+                chatbotToggle.textContent = '-';
+            } else {
+                chatbotBody.style.display = 'none';
+                chatbotToggle.textContent = '+';
+            }
+        }
+    </script>
+    
+    <!-- Please note unpkg.com is unaffiliated with Google Maps Platform. -->
+    <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6"></script>
+    <gmpx-api-loader key="YOUR_ACTUAL_API_KEY_HERE" solution-channel="GMP_QB_locatorplus_v10_cABDF"></gmpx-api-loader>
+
+    <style> 
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        #chatbot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #chatbot-header h3 {
+            margin: 0;
+        }
+
+        #chatbot-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        #chatbot-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        #chatbot-messages {
+            padding: 10px;
+        }
+
+        #chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        #chatbot-text {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+    </style>
+    <script src="chatbot.js"></script>
+    <script src="animations.js"></script>
+</body>
+</html>
