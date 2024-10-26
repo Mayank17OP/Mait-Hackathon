@@ -6,8 +6,9 @@
     <title>MY MEDS</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mymed.css">
-    <link rel="stylesheet" href="animation.css">
+    <link rel="stylesheet" href="animations.css">
     <link href="locatorplus.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script>
         const CONFIGURATION = {
             "locations": [
@@ -20,13 +21,17 @@
         };
         
         // Add your chatbot API key here
-        const CHATBOT_API_KEY = AIzaSyDxQSIR3uXc46uD-ElB7kVEIhYajRbsPuM;
+        const CHATBOT_API_KEY = "AIzaSyDxQSIR3uXc46uD-ElB7kVEIhYajRbsPuM";
     </script>
     <script src="locatorplus.js" type="module"></script>
 </head>
 <body>
     <header>
         <h1>MY MEDS</h1>
+        <div id="login-section">
+            <i class="fas fa-user"></i>
+            <a href="#" id="login-link">Login</a>
+        </div>
     </header>
     
     <nav>
@@ -70,12 +75,26 @@
             document.getElementById('search-results').innerHTML = "Searching for: " + query;
         }
 
-        function sendChatbotMessage() {
+        async function sendChatbotMessage() {
             var message = document.getElementById('chatbot-text').value;
-            // You can now use CHATBOT_API_KEY in your chatbot logic
-            // For example:
-            // sendToChatbotAPI(message, CHATBOT_API_KEY);
             document.getElementById('chatbot-messages').innerHTML += "<p>User: " + message + "</p>";
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message }),
+                });
+                const data = await response.json();
+                
+                document.getElementById('chatbot-messages').innerHTML += "<p>Bot: " + data.response + "</p>";
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('chatbot-messages').innerHTML += "<p>Bot: Sorry, I encountered an error.</p>";
+            }
+            
             document.getElementById('chatbot-text').value = "";
         }
 
